@@ -57,12 +57,21 @@ static openDB(){
   }
 
  static fetchAllReviews(){
+
     fetch(`http://localhost:1337/reviews/`)
        .then(response => response.json())
        .then(response => {console.log("response fetchAllReviews: ", response);
         return DBHelper.createStoreReviews(response);
        })
        .catch(err=> console.log(err));
+        
+   }
+
+ static fetchAllReviewsByID(){
+   fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+    .then(response => response.json())
+
+    .catch(err=> console.log(err));
         
    }
 
@@ -113,7 +122,7 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
    DBHelper.openDB().then(function(db){
     console.log('restaurant fetched from indexDB ', db);
    
-      var tx= db.transaction('restaurants');
+      var tx= db.transaction('restaurants', 'readonly');
     var restStore= tx.objectStore('restaurants');
     return restStore.getAll();
 
@@ -131,9 +140,7 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
       .then(callback)
       .catch(err=> console.log(err));
  }
-
- 
-    
+   
     
 }
 
@@ -170,8 +177,7 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     }
 
     
-    
-       
+     
               
 }
 
@@ -296,5 +302,34 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     );
     return marker;
   }
+
+
+
+static setStatusFav(restaurantID, statusFav){
+
+  fetch(`http://localhost:1337/restaurants/${restaurantID}/?is_favorite=${statusFav}`,
+  {
+    method: "PUT"
+
+  })
+.then(res=>{console.log(res);})
+.then(()=>{
+  DBHelper.openDB().then(function(db){
+    const tx=db.transaction('restaurants', 'readwrite');
+    const restStore= tx.objectStore('restaurants');
+       restStore.get(restaurantID)
+      .then(restaurant =>{
+     // console.log(restaurant.is_favorite);
+      restaurant.is_favorite=statusFav;
+      restStore.put(restaurant);
+      console.log('restaurant updated status'+restaurant.is_favorite);
+    });
+  })
+
+});
+}
+
+
+
 
 }

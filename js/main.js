@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	fetchNeighborhoods();
 	fetchCuisines();
+    DBHelper.fetchAllReviews();
 	
 
 });
@@ -85,6 +86,9 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 	});
 }
 
+/**
+	* Initialize Google map, called from HTML.
+*/
 window.initMap = () => {
 	let loc = {
 		lat: 40.722216,
@@ -101,8 +105,8 @@ window.initMap = () => {
 /**
 	* Initialize Google map, called from HTML from both index and restaurant page
 */
-/*
-window.initMap = () => {
+
+/*window.initMap = () => {
 
   if(!document.getElementById('filter-results')){
     fetchRestaurantFromURL((restaurant) => {
@@ -195,11 +199,34 @@ createRestaurantHTML = (restaurant) => {
 	
 	const li = document.createElement('li');
 	li.className='restaurant-listing';
+		
 	
 	const name = document.createElement('h3');
 	name.setAttribute('tabindex', '0');
+
+//create favorite button
+	const favorite = document.createElement('span');
+		favorite.innerHTML='&#9825;'
+		favorite.setAttribute('class', 'favorite_button');
+
+		favorite.setAttribute('class', "is"+restaurant.is_favorite);
+		favorite.onclick= function(){
+			
+			const setNewStatus=!restaurant.is_favorite;	
+			DBHelper.setStatusFav(restaurant.id, setNewStatus);
+			restaurant.is_favorite=setNewStatus;
+
+			setFavIcon(favorite, setNewStatus, restaurant);
+
+		}
+		setFavIcon(favorite, restaurant.is_favorite, restaurant);
+		console.log("after click:"+ restaurant.is_favorite);
+
 	name.innerHTML = restaurant.name;
+	name.append(favorite);
 	li.append(name);
+	
+
 	
 	const picture = document.createElement('picture');
 	
@@ -236,6 +263,9 @@ createRestaurantHTML = (restaurant) => {
 	image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
 	picture.append(image);
 	li.append(picture);
+
+
+		
 	
 	const neighborhood = document.createElement('p');
     neighborhood.setAttribute('tabindex', '0');
@@ -260,24 +290,41 @@ createRestaurantHTML = (restaurant) => {
 	
 	return li
 }
+setFavIcon= (favorite, status, restaurant)=>{
+	
+	if(!status){
 
+		favorite.innerHTML='&#9825;'
+		favorite.setAttribute('title', 'mark as favorite');
+		favorite.setAttribute('aria-label', 'mark '+restaurant.name+ ' as favourite');
+		//favorite.remove('class', 'istrue');
+		favorite.setAttribute('class', 'isfalse');
+
+	}else{
+
+		favorite.innerHTML='&#9829;'
+	//	favorite.remove('class', 'isfalse');
+	favorite.setAttribute('title', 'remove from your favorites');
+		favorite.setAttribute('class', 'istrue');
+		favorite.setAttribute('aria-label', 'remove '+restaurant.name+ ' as favourite');
+	}
+}
+
+/*Lazy load*/
 const preloadImage = el => {
 
  const srcset = el.getAttribute('data-srcset');
-
  if (!srcset) {
-
    return;
-
  }
 
  el.srcset = srcset;
-
  el.classList.add('fade');
-
  el.removeAttribute('data-srcset');
 
 };
+
+
 
 
 /**
@@ -295,7 +342,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 }
 
 
-/*if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
 	window.addEventListener('load', function() {
 		navigator.serviceWorker.register('sw.js').then(function(registration) {
 			// Registration was successful
@@ -306,6 +353,6 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 		});
 	});
 }
-*/
+
 
 
