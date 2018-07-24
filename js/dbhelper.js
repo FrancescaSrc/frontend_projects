@@ -12,37 +12,33 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+
 static openDB(){
+  
+    return idb.open('Restaurants-reviews', 1, function(upgradeDb) {
+    if (!upgradeDb.objectStoreNames.contains('restaurants')) {
+      const restStore = upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});}
+      else{ var restStore = upgradeDb.transaction.objectStore('restaurants');}
+    if (!upgradeDb.objectStoreNames.contains('reviews')) {
+    var revStore = upgradeDb.createObjectStore('reviews', {keyPath: 'id', autoIncrement:true});}
+    else{ var restStore = upgradeDb.transaction.objectStore('reviews');}
+    if (!upgradeDb.objectStoreNames.contains('reviewsAdded')) {
+   var revStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'id', autoIncrement:true});}
+    else{ var restStore2 = upgradeDb.transaction.objectStore('reviewsAdded');}
    
-   return idb.open('Restaurants-reviews', 1, function(upgradeDb) {
-    var restStore = upgradeDb.transaction.objectStore('restaurants');
-       
-    console.log('restStore is empty', restStore);
-    
-    });
+   
+    }).catch(err=> console.log(err));
   }
 
-  static openReviewsDB(){
-   
-   return idb.open('ReviewsDB', 1, function(upgradeDb) {
-    
-    if (!upgradeDb.objectStoreNames.contains('reviews')) {
-       var revStore = upgradeDb.transaction.objectStore('reviews');
-    }
-   
-    console.log('revStore is empty', restStore);
-    
-    });
-  }
+
+
+   /*Creates a store for the restaurants and add them*/
 
   static createStore(response){
     var restaurants=response;
    // console.log('create', restaurants)
    idb.open('Restaurants-reviews', 1, function(upgradeDb) {
-
     var restStore = upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
-    
-    
     }).then(function(db) {
     // or the very first load, there's no point fetching
     // posts from IDB
@@ -55,26 +51,40 @@ static openDB(){
               return tx.complete;
               });
           });
+    
 
     return restaurants;
   }
 
+ static fetchAllReviews(){
+    fetch(`http://localhost:1337/reviews/`)
+       .then(response => response.json())
+       .then(response => {console.log("response fetchAllReviews: ", response);
+        return DBHelper.createStoreReviews(response);
+       })
+       .catch(err=> console.log(err));
+        
+   }
+
+  /*Creates a store for the reviews and add them*/
+
   static createStoreReviews(response){
-      
     var reviews=response;
    // console.log('create', restaurants)
-   idb.open('ReviewsDB', 1, function(upgradeDb) {
-
-    var restStore = upgradeDb.createObjectStore('reviews', {keyPath: 'id'});
-    
+   idb.open('Restaurants-reviews', 1, function(upgradeDb) {
+if (!upgradeDb.objectStoreNames.contains('reviews')) {
+    var restStore = upgradeDb.createObjectStore('reviews', {keyPath: 'id', autoIncrement:true});}
+    if (!upgradeDb.objectStoreNames.contains('reviewsAdded')) {
+   var restStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'id', autoIncrement:true});
+ }
     
     }).then(function(db) {
     // or the very first load, there's no point fetching
     // posts from IDB
-        if (!db) { return;}
-                DBHelper.openDB('reviews');
+       if (!db) { return;}
+              DBHelper.openDB('reviews');
               reviews.forEach(review =>{
-                console.log(review.name);
+               // console.log(review.name);
               var tx= db.transaction('reviews', 'readwrite');
               var restStore= tx.objectStore('reviews');
               restStore.put(review);
@@ -83,6 +93,10 @@ static openDB(){
           });
 
     return reviews;
+  }
+
+  static addReviewsToIDB(reviews){
+     
   }
   
 
@@ -94,23 +108,26 @@ static openDB(){
     return null;
   }
 
-    if(indexedDB in window){
+    if('indexedDB' in window){
 
    DBHelper.openDB().then(function(db){
-    console.log('fetched from indexDB ', db);
+    console.log('restaurant fetched from indexDB ', db);
    
       var tx= db.transaction('restaurants');
     var restStore= tx.objectStore('restaurants');
     return restStore.getAll();
 
   }).then(function(restaurants){
+   if(restaurants.length==0){
+     DBHelper.fetchRestaurantsFromServer(callback)
+      }
    
     return callback(restaurants);
   });
  } else {
-  fetch(DBHelper.DATABASE_URL)
+
+   fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
-      .then(response => DBHelper.createStore(response))
       .then(callback)
       .catch(err=> console.log(err));
  }
@@ -124,12 +141,14 @@ static openDB(){
   /**
    * Fetch all restaurants without using IDB.
    */
-  static fetchRestaurantsWithoutIDB(callback) {
-   
-   fetch(DBHelper.DATABASE_URL)
+  static fetchRestaurantsFromServer(callback) {
+
+    fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
+      .then(response => DBHelper.createStore(response))
       .then(callback)
       .catch(err=> console.log(err));
+   
 
   }
       
