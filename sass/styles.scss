@@ -15,7 +15,7 @@ header {
   width: 100%; }
 
 ul, li, td, th, p {
-   font-family: 'Roboto', sans-serif; 
+/*    font-family: 'Roboto', sans-serif;  */
   font-size: 1em;
   color: #333;
   line-height: 1.5; }
@@ -130,18 +130,23 @@ ul#breadcrumb {
   top: 200px; }
 
 /* ====================== Map ====================== */
+#map {
+  width: 100%;
+ /*  background-color: #ccc;  */
+/*  border:1px solid red;
+background: url("https://maps.googleapis.com/maps/api/staticmap?&zoom=11&size=250x250&format=jpg&scale=2&markers=size:mid%7Ccolor:red%7C%2040.713829,-73.989667%7C%2040.683555,-73.966393%7C%2040.747143,-73.985414%7C%2040.722216,-73.987501%7C%2040.705089,-73.933585%7C%2040.727397,-73.983645%7C%2040.726584,-74.002082%7C%2040.743797,-73.950652%7C%2040.743394,-73.954235%7C%2040.674925,-74.016162%7C&key=AIzaSyDgN4Cd_214KMTzTKZofZAum8dmywVpfc4") no-repeat;
+*/}
+
+#static_map {
+  width: 100%;
+ /*  background-color: #ccc;  */
+background: url("https://maps.googleapis.com/maps/api/staticmap?&zoom=11&size=250x250&format=jpg&scale=2&markers=size:mid%7Ccolor:red%7C%2040.713829,-73.989667%7C%2040.683555,-73.966393%7C%2040.747143,-73.985414%7C%2040.722216,-73.987501%7C%2040.705089,-73.933585%7C%2040.727397,-73.983645%7C%2040.726584,-74.002082%7C%2040.743797,-73.950652%7C%2040.743394,-73.954235%7C%2040.674925,-74.016162%7C&key=AIzaSyDgN4Cd_214KMTzTKZofZAum8dmywVpfc4") no-repeat;
+}
+
 #map-container {
   width: 100%;
   min-height: 400px;
   margin: 0 auto; }
-
-#map {
-  width: 100%;
- /*  background-color: #ccc;  */
-}
-
-
-
 
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
@@ -172,10 +177,10 @@ ul#breadcrumb {
   background-color: #333;
   padding: 10px;
   font-weight: 100;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   line-height: 1.3;
   font-size: 1.2em;
-  padding: 20px 0px;
+  padding: 10px 0px;
   margin: 0;
   text-transform: uppercase;
   text-align: center;
@@ -189,6 +194,11 @@ ul#breadcrumb {
   text-align: left;
   width: 100%;
   border-radius: 15px 0px 15px 0px; }
+/* 
+#restaurants-list a {
+    display: block;
+    margin: 0;
+    } */
 
 #restaurant-img img {
   -o-object-fit: contain;
@@ -208,98 +218,29 @@ ul#breadcrumb {
   text-decoration: none;
   text-transform: uppercase;
   display:block;
-  padding: 10px;
-  border-radius: 0px 0px 15px 0px; 
+  padding: 15px;
+  border-radius: 0px 0px 20px 0px;
    }
 
 #restaurants-list a:hover, #restaurants-list a:focus {
   color: #fff; }
 
-/* ====================== Restaurant Details ====================== */
-#restaurant-address {
-  font-weight: bold;
-  padding: 0px;
-  margin: 0 auto; }
+ span.istrue{
+    color: red;
+    
+    font-size: 30px;
 
-#restaurant-container {
-  border-bottom: 1px solid #d9d9d9;
-  border-top: 1px solid #fff;
-  font-size: 1.2em;
-  width: 100%;
-  padding: 0;
-  background: #fff;
-  border-radius: 20px 0px 0px 0px; }
+    margin-left: 20px;
+  }
 
-#restaurant-cuisine, p.rating {
-  background-color: #f1a000;
-  color: #ffff;
-  font-weight: 400;
-  letter-spacing: 10px;
-  font-size: 1em;
-  margin: 0;
-  padding: 5px 0;
-  text-align: center;
-  text-transform: uppercase;
-  width: 100%; }
+span.isfalse {
+        color: white;
+       
+    font-size: 30px;
+ 
+    margin-left: 20px;
+}
 
-#restaurants-list {
-  margin: 10px auto;
-  padding: 10px; }
-
-.restaurant-ratings {
-  background-color: #fff;
-  width: 100%;
-  margin: 10px auto;
-  border: 1px solid #eee;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  border-radius: 15px 0px 15px 0px;
-  text-align: justify; }
-
-#reviews-list {
-  width: 100%;
-  margin: 0 auto; }
-
-#reviews-container ul {
-  width: 100%;
-  margin: 0;
-  padding: 0; }
-
-#restaurant-hours {
-  width: 100%;
-  margin: 5px 8px; }
-
-.name, .date {
-  color: #ffffff;
-  background-color: #333;
-  margin: 0;
-  height: 1.5em; }
-
-.name {
-  font-weight: 500;
-  color: #fefefe;
-  width: 48%;
-  padding-left: 3%;
-  text-align: left;
-  border-radius: 15px 0px 0px 0px; }
-
-.date {
-  font-weight: 300;
-  width: 47%;
-  text-align: right;
-  padding-right: 2%; }
-
-p.comments {
-  padding: 10px; }
-
-p.rating {
-  padding: 0 10px; }
-
-#restaurants-list p.address {
-  height: 3em; }
 
   /* ====================== Styles for mobile ====================== */
 
@@ -310,10 +251,6 @@ main, section, #restaurants-list, section#reviews-container {
   -ms-flex-wrap: wrap;
       flex-wrap: wrap; }
 
-.inside #map-container {
-  -webkit-box-ordinal-group: 3;
-      -ms-flex-order: 2;
-          order: 2; }
 
 #map-container {
   -webkit-box-ordinal-group: 1;
@@ -335,12 +272,8 @@ main, section, #restaurants-list, section#reviews-container {
   #filter-results {
     width: 98vw;
     margin: 0 auto
+
      }
-#static_map {
-  width: 100%;
-  min-height: 400px;
-  background: url("https://maps.googleapis.com/maps/api/staticmap?&zoom=11&size=250x250&format=jpg&scale=2&markers=size:mid%7Ccolor:red%7C%2040.713829,-73.989667%7C%2040.683555,-73.966393%7C%2040.747143,-73.985414%7C%2040.722216,-73.987501%7C%2040.705089,-73.933585%7C%2040.727397,-73.983645%7C%2040.726584,-74.002082%7C%2040.743797,-73.950652%7C%2040.743394,-73.954235%7C%2040.674925,-74.016162%7C&key=AIzaSyDgN4Cd_214KMTzTKZofZAum8dmywVpfc4") no-repeat 50% 50%;
-}     
   .inside main {
     width: 90vw;
     margin: 5px auto;
@@ -357,9 +290,9 @@ main, section, #restaurants-list, section#reviews-container {
     margin: 10px;
     font-size: 4vw; }
   header h1 a {
-    font-size: 0.8em;
+    font-size: 1.2em;
     /*fallback for if browser does not support vw */
-    font-size: 6vw;
+    font-size: 7vw;
     letter-spacing: 4px; }
   h2 {
     font-size: 1.2em;
@@ -387,10 +320,9 @@ main, section, #restaurants-list, section#reviews-container {
     padding: 10px 0; }
   #restaurant-list a {
     font-size: 0.8em; }
-  .restaurant-listing a{
-    grid-area: 4 / 1 / 4 / span 2
-    }
-  /* restaurant details */
-  #restaurant-img {
-    width: 100vw;
-    height: calc(100vw*0.75); } }
+  .restaurant-listing a, #restaurants-list a {
+    padding: 10px;
+    grid-area: 4 / 1 / 4 / span 2;
+    margin: 0;
+    border-radius: 0px 0px 15px 0px; }  
+ }

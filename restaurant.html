@@ -11,9 +11,11 @@
 		<link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
 		<!-- Main CSS file -->
 		<link rel="stylesheet" href="css/styles.css" type="text/css"/>
+		<link rel="stylesheet" href="css/restaurant_styles.css" type="text/css"/>
 		<link rel="stylesheet" href="css/responsive_min500.css" media="(min-width: 502px) and (max-width: 699px)">
 		<link rel="stylesheet" href="css/responsive_desktop.css" media="(min-width: 700px)">
 		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 		<title>Restaurant Info</title>
 	</head>
 	
@@ -30,7 +32,7 @@
 			<ul id="breadcrumb">
 				<li><a href="./index.html">Home</a></li>
 			</ul>
-		</nav>
+		</nav><div id="favorite"></div>
 		<!-- End breadcrumb -->
 		
 		<!-- Beginning main -->
@@ -54,40 +56,23 @@
 			<!-- End map -->
 			<!-- Beginning reviews -->
 			<section id="reviews-container" tabindex="-1">
-			
+				<h3>Reviews</h3>
+			<ul id="reviews-list">
+					
+				</ul>
 			</section>
 
 
 			
-				<ul id="reviews-list"></ul>
+				
 				<section id="reviews-form" tabindex="0">
 				
 				
   <div class="form" id="review-form" >
-    <!--  <form action="http://localhost:1337/reviews" method="post">
-     	<label>Your name:</label>
-       <input type="text" name="name" value=""><br>
-       
-       <div class="rating">
-       	<label>Your rating:</label>
-         <input type="radio" name="rating" value="0" checked /><span class="hide">&#11088</span>
-         <input type="radio" name="rating" value="1" /><span>&#10032;</span>
-         <input type="radio" name="rating" value="2" /><span>&#10032;</span>
-         <input type="radio" name="rating" value="3" /><span>&#10032;</span>
-         <input type="radio" name="rating" value="4" /><span>&#10032;</span>
-         <input type="radio" name="rating" value="5" /><span>&#10032;</span>
-     </div>
-     <label>Your review:</label>
-     <textarea  name="comment" form="reviewform" placeholder="type here your review">Enter text here...
-     </textarea>
-       <input type="submit" value="Send">
-     
-       <input type="reset">
-     </form>
-       -->
+  
     
   </div>
-  <div class="results__display"></div>
+  <div class="error"></div>
 </div>
 				
 			</section>
@@ -100,18 +85,20 @@
 		<!-- Beginning footer -->
 		<footer id="footer">
 			Copyright (c) 2017 <a href="./index.html" title="back to homepage">Restaurant Reviews</a> All Rights Reserved.
+			
 		</footer>
 		<!-- End footer -->
 		
-		<!-- Beginning scripts -->
-		<!-- Database helpers -->
-		<script src="js/lazyload.min.js"></script>
-		
-			<script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-			<script type="application/javascript" charset="utf-8" src="js/restaurant_info.js"></script> 
-			<script src="js/idb.js"></script>  
-	<!-- <script type="application/javascript" charset="utf-8" src="js/all.js"></script> -->
-		
+		<!-- Beginning scripts
+			Database helpers -->
+	<!-- <script src="js/lazyload.min.js"></script>
+	
+		<script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+	
+	<script src="js/idb.js"></script> 
+		<script type="application/javascript" charset="utf-8" src="js/restaurant_info.js"></script> -->
+			<script type="application/javascript" charset="utf-8" src="js/all_restaurant.js"></script> 
+					
 		<!-- Google Maps -->
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH9_vNeO--dXm-22zmcyTtxGBPjALuz0A&libraries=places&callback=initMap"></script>
 		<!-- End scripts -->

@@ -14,6 +14,7 @@ class DBHelper {
 
 
 static openDB(){
+
   
     return idb.open('Restaurants-reviews', 1, function(upgradeDb) {
     if (!upgradeDb.objectStoreNames.contains('restaurants')) {
@@ -23,7 +24,7 @@ static openDB(){
     var revStore = upgradeDb.createObjectStore('reviews', {keyPath: 'id', autoIncrement:true});}
     else{ var restStore = upgradeDb.transaction.objectStore('reviews');}
     if (!upgradeDb.objectStoreNames.contains('reviewsAdded')) {
-   var revStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'id', autoIncrement:true});}
+   var revStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'restaurant_id'});}
     else{ var restStore2 = upgradeDb.transaction.objectStore('reviewsAdded');}
    
    
@@ -40,7 +41,7 @@ static openDB(){
    idb.open('Restaurants-reviews', 1, function(upgradeDb) {
     var restStore = upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
     }).then(function(db) {
-    // or the very first load, there's no point fetching
+
     // posts from IDB
         if (!db) { return;}
                 
@@ -57,22 +58,25 @@ static openDB(){
   }
 
  static fetchAllReviews(){
-
-    fetch(`http://localhost:1337/reviews/`)
+     fetch(`http://localhost:1337/reviews/`)
        .then(response => response.json())
-       .then(response => {console.log("response fetchAllReviews: ", response);
+       .then(response => {//console.log("response fetchAllReviews: ", response);
         return DBHelper.createStoreReviews(response);
        })
        .catch(err=> console.log(err));
         
    }
 
- static fetchAllReviewsByID(){
-   fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
-    .then(response => response.json())
+ static fetchReviewsFromServerByID(id){
 
+   return fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+    .then(response => response.json())
+    .then(response => {//console.log("response fetchAllReviews from server: ", response);
+      return response;
+      
+       })
     .catch(err=> console.log(err));
-        
+       
    }
 
   /*Creates a store for the reviews and add them*/
@@ -84,7 +88,7 @@ static openDB(){
 if (!upgradeDb.objectStoreNames.contains('reviews')) {
     var restStore = upgradeDb.createObjectStore('reviews', {keyPath: 'id', autoIncrement:true});}
     if (!upgradeDb.objectStoreNames.contains('reviewsAdded')) {
-   var restStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'id', autoIncrement:true});
+   var restStore2 = upgradeDb.createObjectStore('reviewsAdded', {keyPath: 'restaurant_id'});
  }
     
     }).then(function(db) {
@@ -104,10 +108,9 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     return reviews;
   }
 
-  static addReviewsToIDB(reviews){
-     
-  }
   
+
+
 
 /**
    * Fetch all restaurants.
@@ -120,7 +123,7 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     if('indexedDB' in window){
 
    DBHelper.openDB().then(function(db){
-    console.log('restaurant fetched from indexDB ', db);
+  //  console.log('restaurant fetched from indexDB ', db);
    
       var tx= db.transaction('restaurants', 'readonly');
     var restStore= tx.objectStore('restaurants');
@@ -128,7 +131,8 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
 
   }).then(function(restaurants){
    if(restaurants.length==0){
-     DBHelper.fetchRestaurantsFromServer(callback)
+     DBHelper.fetchRestaurantsFromServer(callback);
+     DBHelper.fetchAllReviews();
       }
    
     return callback(restaurants);
@@ -138,6 +142,7 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
    fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
       .then(callback)
+      .then(DBHelper.fetchAllReviews())
       .catch(err=> console.log(err));
  }
    
@@ -153,7 +158,8 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     fetch(DBHelper.DATABASE_URL)
       .then(response => response.json())
       .then(response => DBHelper.createStore(response))
-      .then(callback)
+      .then(DBHelper.fetchAllReviews())
+      .then(response=> callback(response))
       .catch(err=> console.log(err));
    
 
@@ -193,6 +199,10 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
     var restStore= tx.objectStore('restaurants');
     return restStore.get(parseInt(id));
   }).then(function(restaurant){
+    if(restaurant===undefined){
+      DBHelper.fetchRestaurantById(id, callback);
+    //  console.log('test');
+    }
  //  console.log('restStore contents res1: ', restaurant);
      callback(restaurant);
   }); 
@@ -307,27 +317,43 @@ if (!upgradeDb.objectStoreNames.contains('reviews')) {
 
 static setStatusFav(restaurantID, statusFav){
 
+
+if(navigator.onLine){
   fetch(`http://localhost:1337/restaurants/${restaurantID}/?is_favorite=${statusFav}`,
   {
     method: "PUT"
 
   })
-.then(res=>{console.log(res);})
-.then(()=>{
+  .then(DBHelper.changeFavInLocalIDB(restaurantID, statusFav))
+  .catch(err=> console.log(err));
+}else{
+DBHelper.changeFavInLocalIDB(restaurantID, statusFav);
+window.addEventListener('online', function(event) {
+   console.log('rest fav updated');
+            DBHelper.setStatusFav(restaurantID, statusFav);
+           
+          });
+
+}
+
+}
+
+static changeFavInLocalIDB(restaurantID, status){
   DBHelper.openDB().then(function(db){
     const tx=db.transaction('restaurants', 'readwrite');
     const restStore= tx.objectStore('restaurants');
        restStore.get(restaurantID)
       .then(restaurant =>{
      // console.log(restaurant.is_favorite);
-      restaurant.is_favorite=statusFav;
+      restaurant.is_favorite=status;
       restStore.put(restaurant);
-      console.log('restaurant updated status'+restaurant.is_favorite);
-    });
+   //   console.log('restaurant updated status'+restaurant.is_favorite);
+    }).catch(err=> console.log(err));
   })
-
-});
 }
+  
+
+
 
 
 

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 	fetchNeighborhoods();
 	fetchCuisines();
-    DBHelper.fetchAllReviews();
+    
 	
 
 });
@@ -86,8 +86,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 	});
 }
 
-/**
-	* Initialize Google map, called from HTML.
+/* Initialize Google map, called from HTML.
 */
 window.initMap = () => {
 	let loc = {
@@ -104,7 +103,7 @@ window.initMap = () => {
 
 /**
 	* Initialize Google map, called from HTML from both index and restaurant page
-*/
+
 
 /*window.initMap = () => {
 
@@ -123,7 +122,7 @@ window.initMap = () => {
     } 
   });
   }else{
-  	console.error("gaat mis");
+  	//console.error("gaat mis");
     let loc = {
     lat: 40.722216,
     lng: -73.987501
@@ -161,6 +160,7 @@ updateRestaurants = () => {
 
 		}
 	})
+
 }
 
 /**
@@ -220,7 +220,7 @@ createRestaurantHTML = (restaurant) => {
 
 		}
 		setFavIcon(favorite, restaurant.is_favorite, restaurant);
-		console.log("after click:"+ restaurant.is_favorite);
+	
 
 	name.innerHTML = restaurant.name;
 	name.append(favorite);
@@ -294,7 +294,7 @@ setFavIcon= (favorite, status, restaurant)=>{
 	
 	if(!status){
 
-		favorite.innerHTML='&#9825;'
+		favorite.innerHTML='&#9825;';
 		favorite.setAttribute('title', 'mark as favorite');
 		favorite.setAttribute('aria-label', 'mark '+restaurant.name+ ' as favourite');
 		//favorite.remove('class', 'istrue');
@@ -302,7 +302,7 @@ setFavIcon= (favorite, status, restaurant)=>{
 
 	}else{
 
-		favorite.innerHTML='&#9829;'
+		favorite.innerHTML='&#9829;';
 	//	favorite.remove('class', 'isfalse');
 	favorite.setAttribute('title', 'remove from your favorites');
 		favorite.setAttribute('class', 'istrue');

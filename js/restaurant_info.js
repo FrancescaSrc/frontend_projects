@@ -1,4 +1,4 @@
-		let restaurant;
+	let restaurant; 
 		var map;
 
 
@@ -39,6 +39,7 @@
 						DBHelper.fetchRestaurantById(id, (restaurant) => {
 										self.restaurant = restaurant;
 										if (!restaurant) {
+
 											console.error("error: restaurant not found, fetching from server");
 											return DBHelper.fetchRestaurantsFromServer(callback);
 											
@@ -67,16 +68,16 @@
 			name.innerHTML = restaurant.name;
 			//create favorite button
 			const favorite = document.createElement('span');
-					favorite.innerHTML='&#9825;'
-			favorite.setAttribute('class', 'favorite_button');
+			favorite.innerHTML='&#9825;'
+			favorite.setAttribute('class', 'favorite_icon');
 			favorite.setAttribute('class', "is"+restaurant.is_favorite);
-			favorite.setAttribute('alt', 'try this one');
-			favorite.onclick= function(){
-				
+
+			//this part is adapted from the solution proposed in tutorial online
+
+			favorite.onclick= function(){	
 				const setNewStatus=!restaurant.is_favorite;	
 				DBHelper.setStatusFav(restaurant.id, setNewStatus);
 				restaurant.is_favorite=setNewStatus;
-
 				setFavIcon(favorite, setNewStatus, restaurant);
 
 			}
@@ -121,6 +122,7 @@
 
 	/*
 	*Sets the favorite icon on or off and add correct styles to it
+	*Adapted from the solutions proposed in the tutorial online by Lorenzo
 	*/
 	setFavIcon= (favorite, status, restaurant)=>{
 		
@@ -142,29 +144,46 @@
 
 
 
-		fetchReviewsByID= (id) =>{
 
-			//fetch first from IDB
-			if('indexedDB' in window){
-			DBHelper.openDB().then(function(db){
-		    console.log('reviews fetched from indexDB ', db);
-		    var tx= db.transaction('reviews');
-		    var restStore= tx.objectStore('reviews');
-		    return restStore.getAll();
-		   	console.log('reviews fetched from indexDB ', reviews.length);
-		   	return selectedRev=reviews.filter(r => r.restaurant_id == id)
-		  	if(selectedRev.length===0 || reviews.length===0){
-		  	DBHelper.fetchAllReviewsByID();}
+	fetchReviewsByID= (id) =>{
+		
+if('indexedDB' in window){
+	DBHelper.openDB().then(function(db){
+  //  console.log('restaurant fetched from indexDB ', db);
+   
+      var tx= db.transaction('reviews', 'readonly');
+    var restStore= tx.objectStore('reviews');
+    return restStore.getAll();
+})
+.then(reviews=>{
+	
+	var selectedRev =reviews.filter(r => parseInt(r.restaurant_id) == id);
+//	console.log(selectedRev);
+	return selectedRev;}
+).then(
+reviews=>{
+if(reviews.length===0){
+	 	fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+    .then(response => response.json())
+    .then(response => {
+    	var reviews=response;
+    	reviews.map(review=>{addLocalToStore('reviews', review)});
+    	return reviews;
+       })
+    .then(fillReviewsHTML(reviews))
+	 	.catch(err=> console.log(err));
+		  }else{
+		  	fillReviewsHTML(reviews);
+		  }
+		}).catch(err=> console.log(err));
 		  	
-		  })
+		} else {
+			 DBHelper.fetchReviewsFromServerByID(id)
 			.then(response => fillReviewsHTML(response))
 			.catch(err=> console.log(err));
-		  	
-		 } else {
-			DBHelper.fetchAllReviewsByID().then(response => fillReviewsHTML(response))
 		}
-	}
-
+	
+}
 
 
 		/**
@@ -203,13 +222,13 @@
 			//console.log(self.restaurant);
 			
 			const container = document.getElementById('reviews-container');
-			const title = document.createElement('h3');
+			/*const title = document.createElement('h3');
 			title.innerHTML = 'Reviews';
-			container.appendChild(title);
+			container.appendChild(title);*/
 			
-			if (!reviews) {
+			if (!reviews || reviews.length===0) {
 				const noReviews = document.createElement('p');
-				noReviews.innerHTML = 'No reviews yet!';
+				noReviews.innerHTML = 'Please add your review!';
 				container.appendChild(noReviews);
 				return;
 			}
@@ -270,7 +289,11 @@
 		createFormReviewHTML = (restaurant)=>{
 			
 			const formcontainer = document.getElementById('review-form');
-			
+			/*const error = document.createElement('span');
+			error.innerHTML="Please check out your form";
+			error.className="error";*/
+
+
 			const form = document.createElement('form');
 			const restaurantID = document.createElement('input');
 			restaurantID.type="hidden";
@@ -286,31 +309,50 @@
 			const name = document.createElement('input');
 			name.type="text";
 			name.name="name";
+			name.setAttribute('required', true);
+			//namelabel.appendChild(error);
 			form.appendChild(name);
 			
 
 			const ratinglabel = document.createElement('label');
 			ratinglabel.innerHTML="Your rating:";
+			ratinglabel.setAttribute('tabindex', '0');
 			form.appendChild(ratinglabel);
 			const rating = document.createElement('div');
-			rating.className="rating";
+			rating.setAttribute('aria-label', "set your rating");
+			rating.id="rating";
 			for(var i=0; i<=5; i++){
-			const inputlabel = document.createElement('label');
+			const valueLable=document.createElement('label');
+			valueLable.innerHTML=i;
 			const input = document.createElement('input');
-			
+			input.className="rating";
 			input.type="radio";
 			input.name="rating";
 			input.value= i;
-			input.setAttribute('aria-label', "number of stars ");
-			const span = document.createElement('span');
-			span.innerHTML="&#10032;";
-			if(i==0){
+			input.id="value"+i;
+			input.setAttribute('tabindex', '-1');
+			input.setAttribute('aria-checked', 'false');
+			input.setAttribute('aria-label', "number of stars is "+i);
+			valueLable.setAttribute('for', input.id);
+			/*const span = document.createElement('span');
+			span.innerHTML="&#10032;";*/
+			if(i===0){
 				input.className="hide";
-				input.setAttribute('checked', true);
+				valueLable.className="hide";		
+				input.setAttribute('tabindex', '-1');
+
 			}
-			input.appendChild(span);
-			inputlabel.appendChild(input);
-			rating.appendChild(input);	
+			if(i===1){
+				input.setAttribute('tabindex', '0');	
+				input.setAttribute('checked', true);
+				input.setAttribute('aria-checked', 'true');
+
+			}
+
+			input.setAttribute('required', true);
+			rating.appendChild(valueLable);
+			rating.appendChild(input);
+			
 			}
 			form.appendChild(rating);
 
@@ -319,63 +361,111 @@
 			form.appendChild(commentlabel);
 			const comment = document.createElement('textarea');
 			comment.name="comments";
+			comment.setAttribute('required', true);
 			form.appendChild(comment);
 			
 
 			const button = document.createElement('button');
 			button.type="submit";
 			button.innerHTML="submit";
+			
 			form.appendChild(button);
+			form.onsubmit= function(){addReview()};
 
 			formcontainer.appendChild(form);
 			
 
 		}
 
+addReview = ()=>{
+		event.preventDefault();
+		    
+		handleFormSubmit(event);
+	/*let restaurantID=parseInt(document.getElementsByName('restaurant_id')[0].value);
+	let name=document.getElementsByName('name')[0].value;
+	let rating;
+	let ratingElements=document.getElementsByName('rating');
+	let comments=document.getElementsByName('comments')[0].value;
+	for(var i=0; i=<ratingElements.length; i++){
+		return rating=ratingElements[i].checked;
+	}
+*/
+
+}
+
 		
 
 		/**
-		 * This code is copyrighto of: https://code.lengstorf.com/get-form-values-as-json/
+		 * This code adapted from the copyrighted code of: https://code.lengstorf.com/get-form-values-as-json/
 		 A handler function to prevent default submission and run our custom script.
 		 * @param  {Event} event  the submit event triggered by the user
 		 * @return {void}
 		 */
-		handleFormSubmit = event => {
-				  
-		  const data = formToJSON(event.target.elements);
+handleFormSubmit = event => {		  
+		 const data = formToJSON(event.target.elements);
 		  
-		  // Demo only: print the form data onscreen as a formatted JSON object.
-		 // const dataContainer = document.getElementsByClassName('reviews-container');
-		  
-		  // Use `JSON.stringify()` to make the output valid, human-readable JSON.
-		  const dataContainer = document.getElementsByClassName('results__display')[0];
-		  
-		  // Use `JSON.stringify()` to make the output valid, human-readable JSON.
-		  const reviewJSON = JSON.stringify(data, null, "  ");
+		 const reviewFormatted={
+		 	"restaurant_id": parseInt(data["restaurant_id"]),
+		 	"name":data["name"],
+		 	"rating":parseInt(data["rating"]),
+		 	"comments":data["comments"],
+		 	"createdAt": new Date()
+
+		 }
+
+
 		 const revContainer = document.getElementById('reviews-list');
-		 let newReview=createReviewHTML(data);
-		 revContainer.append(newReview);
-		 //dataContainer.textContent= reviewJSON;
+		 let newReview=createReviewHTML(reviewFormatted);
 		 
+		 revContainer.append(newReview);		 
 		  // ...send data as request ...
-		sendDataToIDB(data);
+		if(navigator.onLine){
+			
+			addtoDBandCache(reviewFormatted);
+
+		}else{
+			saveDataToLocalDB(reviewFormatted);
+		}
+
+		
 		emptyForm(event.target.elements);
 
 		};
 
 		/**
-		 * This code is copyrighto of: https://code.lengstorf.com/get-form-values-as-json/ 
+		 * This code adapted from the copyrighted code of: https://code.lengstorf.com/get-form-values-as-json/ 
 		 * Retrieves input data from a form and returns it as a JSON object.
 		 * @param  {HTMLFormControlsCollection} elements  the form elements
 		 * @return {Object}                               form data as an object literal
 		 */
 		const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+	
+		var err = document.getElementsByClassName('error');
+	  	err.innerHTML="";
+	  	
 		 if (isValidElement(element) && isValidValue(element)) {
-	    data[element.name] = element.value;
-	  } 
-		 // console.log("test", data);
+	    data[element.name] = escapeRegExp(element.value);}
+	  
+	  if(element.value===""|| element.value ===0){
+	  //	console.log("this is empty" + element);
+	  	err.innerHTML="Please correct your input, empty fields, <, %, symbols and are not allowed";
+	  	}
+
+	 
+
+	   
+		//console.log("test", data);
 		  return data;
 		}, {});
+
+/*Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+Escaping user input that is to be treated as a literal string within 
+a regular expression—that would otherwise be mistaken for a special character*/
+
+		function escapeRegExp(string) {
+
+  return string.replace(/[.*+^$<>{}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 
 
 	/**
@@ -384,7 +474,8 @@
 	 * @param  {Element} element  the element to check
 	 * @return {Bool}             true if the element is an input, false if not
 	 */
-	const isValidElement = element => {
+	const isValidElement = element => { 
+			
 	  return element.name && element.value;
 	};
 
@@ -395,35 +486,33 @@
 	 * @return {Boolean}          true if the value should be added, false if not
 	 */
 	const isValidValue = element => {
-	//	console.log(element.checked);
-	  return (!['checkbox', 'radio'].includes(element.type) || element.checked);
+		
+	  return (!['checkbox', 'radio'].includes(element.type) || element.checked && element.checked !=0);
 	};
 
-	/**
-	 * Create a review-item with the JASON-data of the form 
-	 * Checks if an element’s value can be saved (e.g. not an unselected checkbox).
-	 * @param  {Element} element  the element to check
-	 * @return {Boolean}          true if the value should be added, false if not
-	 */
 
-		sendDataToIDB = (data) =>{
-			console.log(data);
-		    if('indexedDB' in window){
+saveDataToLocalDB = (data) =>{
+			//console.log(data);
+			if('indexedDB' in window){
 		    	//save to a temporary store
-		    	addToStore('reviewsAdded', data)
-		    .then(console.log("review added to IDB"))
-		    .then(addToStore('reviews', data))           
+		    addLocalToStore('reviewsAdded', data)
+		    .then(addLocalToStore('reviews', data))
+		    .then(console.log("review added to IDB"))            
 		    .catch(error => console.error('Error', error));
-		}else{
-			synchronizeDB(data);
-		}  
+		    window.addEventListener('online', (event)=>{
+		    	console.log('Browser back online');
+		    	
+		    })
+	
+		}
 	}
+	
 
 /*
-*General help function to add to store
+*General help function to add to a store
 */
 
-	addToStore= (store, data)=>{
+	addLocalToStore= (store, data)=>{
 		return DBHelper.openDB().then(function(db) {
 		        if (!db) { return;}
 		              DBHelper.openDB(store);
@@ -434,19 +523,21 @@
 		              })
 	}
 /*
-*Empties the form to add a review
+*Empty the form to add a review
 */
 
 	emptyForm = (elements)=>{
-	//var form = document.querySelector('#review-form');
+	var form = document.querySelector('#review-form');
 
 	elements.name.value="";
-	elements.rating.value="0";
+	elements.rating.value="1";
 	elements.comments.value="";
 	}
 
 
-		fetchAddedReviews=()=> {
+
+
+	fetchAddedReviews=()=> {
 			
 			/**
 		   * Fetch all new reviews.
@@ -463,8 +554,9 @@
 
 
 
-	/*
-		synchronizeDB = (item) =>{
+
+	addtoDBandCache = (item) =>{
+
 		var url = "http://localhost:1337/reviews/";
 		fetch(url,
 		{
@@ -475,10 +567,10 @@
 		    method: "POST",
 		    body: JSON.stringify(item)
 		})
-		.addReviewsToIDB()
-		.catch(function(error){ console.log(error);})
-
-		}*/
+		.then(addLocalToStore('reviews', item))
+		.catch(function(error){console.log(error);})
+}
+	
 
 
 
@@ -492,15 +584,7 @@
 			li.tabindex=0;
 			li.innerHTML = restaurant.name;
 			breadcrumb.appendChild(li);
-			
-
-
 		}
-
-		const fav = document.querySelector('#favorite').addEventListener('click', function(e){
-			  e.preventDefault();
-			  
-			});
 
 
 
@@ -520,33 +604,31 @@
 			return decodeURIComponent(results[2].replace(/\+/g, ' '));
 		}
 
+
+				  		
+
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function() {
 			navigator.serviceWorker.register('sw.js')
 			.then(function(registration) {
 				// Registration was successful
 				console.log('ServiceWorker registration successful with scope: ', registration.scope);
-				if('sync' in registration){
-						
-					var form = document.querySelector('#review-form');
-				  	form.addEventListener('submit', function(event) {
-				    event.preventDefault();
-				    
-				    handleFormSubmit(event);
-				    	   
-				    //console.log("syc is on");
-				    //console.log("this is the registration"+ registration);
+				if('sync' in registration){			
+				  	window.addEventListener('online', function(event) {
 				    return registration.sync.register(event);
 					});
-					
+
 				  }
-				  		 
-				 
-				})
-		
-			.catch(function(err) {
+					
+
+				  
+				}).catch(function(err) {
 				// registration failed :(
 				console.log('ServiceWorker failed: ', err);
 			});
-		});
-	}
+		
+	});
+
+}
+
+
