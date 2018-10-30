@@ -1,6 +1,6 @@
 #### Project overview
  
-This is my version of the final Restaurant Reviews project for the Nanodegree Mobile Web Specialist. I have converted the static site into a responsive mobile-ready web application that works on different sized displays and accessible for screen reader use. I have implemented a service worker for offline rendering to provide a better experience for your users with no or slow internet connection and some extra features such as the possibility to add a restaurant as favourite. 
+This is my final Restaurant Reviews project for the Nanodegree Mobile Web Specialist. I have converted the static site into a responsive mobile-ready web application that works on different sized displays and accessible for screen reader use. I have implemented a service worker and indexedIDB for offline rendering to provide a better experience for your users with no or slow internet connection and some extra features such as the possibility to add a restaurant as favourite. Please find below some screenshots and the instructions on how to install the software.
 #### Home page for desktop and mobile 
 ![image1](./images/restaurantApp_home.png "Project home")
 ![image2](./images/restaurantApp_mobile3.png "Project home for mobile")    
