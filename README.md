@@ -72,9 +72,9 @@ debug: Environment : development
 debug: Port        : 1337
 To check if it is working go to: http://localhost:1337/restaurants/
 you should see a list of restaurants.
-- http://localhost:1337/reviews/?restaurant_id=<restaurant_id> for a single restaurant with a specific id
-- http://localhost:1337/reviews/ for a list of reviews
-- http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false to check the option favorite is on or off
+- 'http://localhost:1337/reviews/?restaurant_id=<restaurant_id>' for a single restaurant with a specific id
+- 'http://localhost:1337/reviews/ 'for a list of reviews
+- 'http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false' to check the option favorite is on or off
 
 
 
