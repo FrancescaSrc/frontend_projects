@@ -1,3 +1,21 @@
+#### Project overview
+This is my version of the final Restaurant Reviews project for the Nanodegree Mobile Web Specialist. I have converted the static site into a responsive mobile-ready web application that works on different sized displays and accessible for screen reader use. I have implemented a service worker for offline rendering to provide a better experience for your users with no or slow internet connection and some extra features such as the possibility to add a restaurant as favourite.
+
+The project includes these features:
+- Responsive: the site css, html and images are optimized for all media and show different images with a different size.
+- Offline first: the site uses a service worker with a local DB + cache to store all images, js and html file to make it more efficient and available also offline.
+- When offline, the sites stores the added data locally and synchonize them with the DB as soon as it is online.
+- The site performance is very good
+
+###Installing
+Clone or download the repository and save it in folder mws-restaurant-stage-3.
+Start up a webserver to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. In a terminal, check the version of Python you have: python -V. If you have Python 2.x, spin up the server with python -m SimpleHTTPServer 8000 (or some other port, if port 8000 is already in use.) For Python 3.x, you can use python3 -m http.server 8000. If you don't have Python installed, navigate to Python's website to download and install the software. You can use any other Web Server such as Tomcat. For Tomcat: copy the project folder under the tomcat\webapps\ folder
+
+With your server running, start Chrome webbrowser and visit the site: http://localhost:8000/mws-restaurant-stage-3/
+
+Run the local Development Server, see instrunction below.
+
+
 # Local Development API Server
 ## Usage
 #### Get Restaurants
@@ -46,100 +64,13 @@ Let's start with running commands in your terminal, known as command line interf
 ### You should now have access to your API server environment
 debug: Environment : development
 debug: Port        : 1337
+To check if it is working go to: http://localhost:1337/restaurants/
+you should see a list of restaurants.
+http://localhost:1337/reviews/?restaurant_id=<restaurant_id> for a single restaurant with a specific id
+http://localhost:1337/reviews/ for a list of reviews
+http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false to check the option favorite is on or off
 
 
-## Endpoints
-
-### GET Endpoints
-
-#### Get all restaurants
-```
-http://localhost:1337/restaurants/
-```
-
-#### Get favorite restaurants
-```
-http://localhost:1337/restaurants/?is_favorite=true
-```
-
-#### Get a restaurant by id
-```
-http://localhost:1337/restaurants/<restaurant_id>
-```
-
-#### Get all reviews for a restaurant
-```
-http://localhost:1337/reviews/?restaurant_id=<restaurant_id>
-```
-
-#### Get all restaurant reviews
-```
-http://localhost:1337/reviews/
-```
-
-#### Get a restaurant review by id
-```
-http://localhost:1337/reviews/<review_id>
-```
-
-#### Get all reviews for a restaurant
-```
-http://localhost:1337/reviews/?restaurant_id=<restaurant_id>
-```
+## Project screenshots
 
 
-### POST Endpoints
-
-#### Create a new restaurant review
-```
-http://localhost:1337/reviews/
-```
-
-###### Parameters
-```
-{
-    "restaurant_id": <restaurant_id>,
-    "name": <reviewer_name>,
-    "rating": <rating>,
-    "comments": <comment_text>
-}
-```
-
-
-### PUT Endpoints
-
-#### Favorite a restaurant
-```
-http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=true
-```
-
-#### Unfavorite a restaurant
-```
-http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false
-```
-
-#### Update a restaurant review
-```
-http://localhost:1337/reviews/<review_id>
-```
-
-###### Parameters
-```
-{
-    "name": <reviewer_name>,
-    "rating": <rating>,
-    "comments": <comment_text>
-}
-```
-
-
-### DELETE Endpoints
-
-#### Delete a restaurant review
-```
-http://localhost:1337/reviews/<review_id>
-```
-
-
-If you find a bug in the source code or a mistake in the documentation, you can help us by
-submitting an issue to our [Waffle Dashboard](https://waffle.io/udacity/mwnd-issues). Even better you can submit a Pull Request with a fix :)
