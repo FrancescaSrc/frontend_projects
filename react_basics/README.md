@@ -52,11 +52,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 To download the start code go to: [Create React App](https://github.com/facebookincubator/create-react-app).
 
-## TL;DR
+## Try it out
 
-To get started or install this project locally:
+To get started, install first React
+* npm install -g create-react-app
 
+Create a react app from scratch 
+* npx create-react-app my-app
+* cd my-app
+* npm start
 
+Or install the code in this project:
 * download the project code 
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
