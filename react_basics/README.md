@@ -8,11 +8,9 @@ This is the first assessment project for Udacity's React Fundamentals course. Th
 ![image1](./assets/myRead1.jpg "Project home")
 
 #### Change settings of the books
-![image2](./assets/myRead2.jpg "Book change type")
 ![image3](./assets/myRead3.jpg "Book change type")
 
 #### Search page and add books to MyReads
-![image4](./assets/myRead4.jpg "Search page") 
 ![image5](./assets/myRead5.jpg "Search page") 
 
 ## This project code
