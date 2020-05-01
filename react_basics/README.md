@@ -5,12 +5,14 @@ This is the first assessment project for Udacity's React Fundamentals course. Th
 
 ## Project screenshots
 #### Detail page 
+Each book is show with title, author and category data are changable with the dropdown 
 ![image1](./assets/myRead1.jpg "Project home")
 
 #### Change settings of the books
 ![image3](./assets/myRead3.jpg "Book change type")
 
 #### Search page and add books to MyReads
+You can add a book and search for it in the database. Just few letters are enough.
 ![image5](./assets/myRead5.jpg "Search page") 
 
 ## This project code
