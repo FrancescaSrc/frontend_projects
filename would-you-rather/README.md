@@ -10,16 +10,16 @@ Functionalities have been developed in reusable components (see src/components) 
 
 ## Project screenshots
 #### Login page 
-![image1](/assets/login.png "Login page") 
-![image2](./assets/login2.png "Login page") 
-![image3](./assets/home.png  "Home page answered polls")
-![image9](./assets/home2.png  "Home page unanswered polls")
-![image4](./assets/create_poll.png  "Create New poll")
-![image10](./assets/answer_poll.png  "Answer poll")
-![image5](./assets/new_poll.png  "Create New added")
-![image6](./assets/pollresults.png  "Results page")
-![image7](./assets/leaderboard.png  "Leader Board")
-![image8](./assets/error.png  "Error page")
+![image1](./assets/login.jpg "Login page") 
+![image2](./assets/login2.jpg "Login page") 
+![image3](./assets/home.jpg  "Home page answered polls")
+![image9](./assets/home2.jpg  "Home page unanswered polls")
+![image4](./assets/create_poll.jpg  "Create New poll")
+![image10](./assets/answer_poll.jpg  "Answer poll")
+![image5](./assets/new_poll.jpg  "Create New added")
+![image6](./assets/pollresults.jpg  "Results page")
+![image7](./assets/leaderboard.jpg  "Leader Board")
+![image8](./assets/error.jpg  "Error page")
 
 ## Getting started
 
