@@ -1,62 +1,81 @@
-# MyReads Project
+#### Project: My Reads, a book tracking App
+ 
+This is my first React project, for the React Developer Nanodegree. I have created a web application that allows to select and categorize books as read, currently reading or want to read.
 
-This is the first assessment project for Udacity's React Fundamentals course. The starting point was a template with static example of the CSS and HTML markup without any of the React code that is needed to complete the project. The goal is to add interactivity to the app by refactoring the static code in this template.
+#### Home page for desktop and mobile 
+![image1](./images/restaurantApp_home.png "Project home")
+![image2](./images/restaurantApp_mobile3.png "Project home for mobile")    
 
+The project includes these features:
+- Responsive: the site css, html and images are optimized for all media and show different images with a different size.
+- Offline first: the site uses a service worker with a local DB + cache to store all images, js and html file to make it more efficient and available also offline.
+- When offline, the sites stores the added data locally and synchonize them with the DB as soon as it is online.
 
-## Project screenshots
+## More project screenshots
 #### Detail page 
-![image1](./assets/myRead1.jpg "Project home")![image1]
-Change settings of the books
-![image2](./assets/myRead2.jpg "Book change type") 
-![image3](./assets/myRead3.jpg "Book change type") 
-Search and add books to MyReads
-![image4](./assets/myRead4.jpg "Search page") 
-![image5](./assets/myRead5.jpg "Search page") 
+![image4](./images/restaurantApp_detail.png "Detail page of a restaurant") ![image1](./images/restaurantApp_mobile2.png "Detail page of for mobile")
+#### Offline first: cached, service worker and IndexedDB
+![image5](./images/restaurantApp_offlineFirst.png "Detail of service worker and Offline first")
+- The site performance is very good
+![image5](./images/performance.PNG "Performance audits in Google Dev tools")
 
-## This project code
-```bash
-├── README.md - This file.
-├── SEARCH_TERMS.md # The whitelisted short collection of available search terms for you to use with your app.
-├── package.json # npm package manager file. It's unlikely that you'll need to modify this.
-├── public
-│   ├── favicon.ico # React Icon, You may change if you wish.
-│   └── index.html # DO NOT MODIFY
-└── src
-    ├── App.css # Styles for your app. Feel free to customize this as you desire.
-    ├── App.js # This is the root of your app. Contains static HTML right now.
-    ├── App.test.js # Used for testing. Provided with Create React App. Testing is encouraged, but not required.
-    ├── BooksAPI.js # A JavaScript API for the provided Udacity backend. Instructions for the methods are below.
-    ├── Shelf.js # A React component showing a shelf.
-    ├── Book.js # A React component showing a single book.
-    ├── Search.js # A React component showing the search page.
-    ├── icons # Helpful images for your app. Use at your discretion.
-    │   ├── add.svg
-    │   ├── arrow-back.svg
-    │   └── arrow-drop-down.svg
-    ├── index.css # Global styles. You probably won't need to change anything here.
-    └── index.js # You should not need to modify this file. It is used for DOM rendering only.
+### Installing
+Clone or download the repository and save it in folder mws-restaurant-stage-3.
+Start up a webserver to serve up the site files on your local computer. Python has some simple tools to do this, and you don't even need to know Python. For most people, it's already installed on your computer. In a terminal, check the version of Python you have: python -V. If you have Python 2.x, spin up the server with python -m SimpleHTTPServer 8080 (or some other port, if port 8080 is already in use.) For Python 3.x, you can use python3 -m http.server 8000. If you don't have Python installed, navigate to Python's website to download and install the software. You can use any other Web Server such as Tomcat. For Tomcat: copy the project folder under the tomcat\webapps\ folder
+
+With your server running, start Chrome webbrowser and visit the site: http://localhost:8080/mws-restaurant-stage-3/
+
+Run the local Development Server, see instrunction below.
+
+
+# Local Development API Server
+## Usage
+#### Get Restaurants
 ```
+curl "http://localhost:1337/restaurants"
+```
+#### Get Restaurants by id
+````
+curl "http://localhost:1337/restaurants/{3}"
+````
 
-## Backend Server
-
-The backend server is provided with file [`BooksAPI.js`](src/BooksAPI.js) contains the methods to perform necessary operations on the backend:
-
-* [`getAll`](#getall) -  Returns a Promise which resolves to a JSON object containing a collection of book objects.
-* [`update`](#update) -  Returns a Promise which resolves to a JSON object containing the response data of the POST request
-* [`search`](#search) -  Returns a Promise which resolves to a JSON object containing a collection of book objects.
-
-
-## Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
-
-To download the start code go to: [Create React App](https://github.com/facebookincubator/create-react-app).
-
-## TL;DR
-
-To get started or install this project locally:
+## Architecture
+Local server
+- Node.js
+- Sails.js
 
 
-* download the project code 
-* install all project dependencies with `npm install`
-* start the development server with `npm start`
+## Getting Started
+
+### Development local API Server
+_Location of server = /server_
+Server depends on [node.js LTS Version: v6.11.2 ](https://nodejs.org/en/download/), [npm](https://www.npmjs.com/get-npm), and [sails.js](http://sailsjs.com/)
+Please make sure you have these installed before proceeding forward.
+
+Great, you are ready to proceed forward; awesome!
+
+Let's start with running commands in your terminal, known as command line interface (CLI)
+
+###### Install project dependancies
+```Install project dependancies
+# npm i
+```
+###### Install Sails.js globally
+```Install sails global
+# npm i sails -g
+```
+###### Start the server
+```Start server
+# node server
+```
+### You should now have access to your API server environment
+debug: Environment : development
+debug: Port        : 1337
+To check if it is working go to: http://localhost:1337/restaurants/
+you should see a list of restaurants.
+- 'http://localhost:1337/reviews/?restaurant_id=<restaurant_id>' for a single restaurant with a specific id
+- 'http://localhost:1337/reviews/ 'for a list of reviews
+- 'http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false' to check the option favorite is on or off
+
+
+
