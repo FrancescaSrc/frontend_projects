@@ -10,7 +10,7 @@ Functionalities have been developed in reusable components (see src/components) 
 
 ## Project screenshots
 #### Login page 
-![image1](./assets/login.png "Login page") 
+![image1](../assets/login.png "Login page") 
 ![image2](./assets/login2.png "Login page") 
 ![image3](./assets/home.png  "Home page answered polls")
 ![image9](./assets/home2.png  "Home page unanswered polls")
