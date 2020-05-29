@@ -125,4 +125,5 @@ The page will reload if you make edits.<br>
 ### `Testing the app in the emulators`
 
 I have tested this project in Android Emulator.
-The web interface that you can access through the Expo DevTools is not supported by the PageViewer module which is build in the Quiz component. If 
+Note:
+The web interface that you can access through the Expo DevTools is not supported by the PageViewer module which is included in the Quiz component (so it will show an error).
