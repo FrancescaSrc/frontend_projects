@@ -11,13 +11,13 @@ Functionalities have been developed in reusable components (see src/components) 
 ## Project screenshots
 #### Login page 
 ![image1](./img/home.jpg "Start screen") 
-![image2](./assets/createDeck.jpg "DeckList screen") 
-![image3](./assets/DeckDetail.jpg  "Detail screen")
-![image9](./assets/addQuestion.jpg  "Add Card screen")
-![image4](./assets/Quiz.jpg  "Quiz screen")
-![image10](./assets/removeDeck.jpg  "Remove Deck feedback screen")
-![image5](./assets/results.jpg  "Good Result screen")
-![image6](./assets/results2.jpg  "Results screen")
+![image2](./img/createDeck.jpg "DeckList screen") 
+![image3](./img/DeckDetail.jpg  "Detail screen")
+![image9](./img/addQuestion.jpg  "Add Card screen")
+![image4](./img/Quiz.jpg  "Quiz screen")
+![image10](./img/removeDeck.jpg  "Remove Deck feedback screen")
+![image5](./img/results.jpg  "Good Result screen")
+![image6](./img/results2.jpg  "Results screen")
 
 Implemented functionalities:
 - List of decks
